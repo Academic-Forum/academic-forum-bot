@@ -1,12 +1,13 @@
-use crate::util::send_message;
+use crate::{commands::help, util::send_message};
 use default::default;
 use dotenv::dotenv;
 use poise::{
-	serenity_prelude::{self as serenity, Ready},
+	serenity_prelude::{self as serenity, GatewayIntents, Ready},
 	Framework, PrefixFrameworkOptions,
 };
 use std::env;
 
+mod commands;
 mod util;
 
 type Error = Box<dyn std::error::Error + Send + Sync>;
@@ -35,7 +36,7 @@ async fn heheheha(ctx: Context<'_>) -> BlankResult {
 /// Register slash commands to discord
 #[poise::command(slash_command, prefix_command)]
 async fn register(ctx: Context<'_>) -> Result<(), Error> {
-	ctx.say("Registering commands...").await?;
+	let message = ctx.say("Registering commands...").await?;
 
 	let commands = &ctx.framework().options().commands;
 	let create_commands = poise::builtins::create_application_commands(commands);
@@ -45,7 +46,9 @@ async fn register(ctx: Context<'_>) -> Result<(), Error> {
 	})
 	.await?;
 
-	ctx.say("Registered commands").await?;
+	message
+		.edit(ctx, |m| m.content("Registered commands."))
+		.await?;
 	Ok(())
 }
 
@@ -63,23 +66,20 @@ async fn main() -> BlankResult {
 
 	println!("Getting DISCORD_API_KEY from .env");
 	let discord_api_key = env::var("DISCORD_API_KEY")?;
-	println!("Getting youtube API key from .env");
+	println!("Getting YOUTUBE_API_KEY from .env");
 	let _youtube_api_key = env::var("YOUTUBE_API_KEY")?;
 
-	let intents =
-		serenity::GatewayIntents::non_privileged() | serenity::GatewayIntents::MESSAGE_CONTENT;
 	let framework = Framework::builder()
 		.options(poise::FrameworkOptions {
-			commands: vec![doxx(), heheheha(), register()],
+			commands: vec![doxx(), heheheha(), register(), help()],
 			prefix_options: PrefixFrameworkOptions {
 				prefix: Some("A!".into()),
-				case_insensitive_commands: true,
 				..default()
 			},
 			..default()
 		})
 		.token(discord_api_key)
-		.intents(intents)
+		.intents(GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT)
 		.user_data_setup(move |ctx, ready, framework| {
 			Box::pin(async move { Ok(user_data_setup(ctx, ready, framework)) })
 		});

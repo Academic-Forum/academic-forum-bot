@@ -1,14 +1,24 @@
 use crate::Context;
-use lazy_static::lazy_static;
-use poise::serenity_prelude::{http::client, Error, Message};
-use std::env;
+use poise::{
+	serenity_prelude::{Error, Message},
+	ReplyHandle,
+};
 
-lazy_static! {
-	static ref HTTP: client::Http = client::Http::new(&env::var("DISCORD_API_KEY").unwrap());
+pub async fn append_edit(
+	ctx: Context<'_>,
+	message: ReplyHandle<'_>,
+	content: &str,
+) -> Result<(), Error> {
+	let original_content = &message.message().await?.content;
+	message
+		.edit(ctx, |m| {
+			m.content(format!("{}\n{}", original_content, content))
+		})
+		.await
 }
 
 pub async fn send_message(ctx: Context<'_>, content: &str) -> Result<Message, Error> {
 	ctx.channel_id()
-		.send_message(&*HTTP, |m| m.content(content))
+		.send_message(ctx.discord(), |m| m.content(content))
 		.await
 }
