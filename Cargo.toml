@@ -1,8 +1,19 @@
 [package]
-name = "Academic-Forum-Bot-Rewrite"
+name = "academic_forum_bot_rewrite"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+default = "0.1.2"
+dotenv = "0.15.0"
+lazy_static = "1.4.0"
+poise = "0.3.0"
+
+[dependencies.tokio]
+version = "1.20.1"
+features = ["full"]
+
+[profile.release]
+codegen-units = 1
+lto = true
+strip = true
