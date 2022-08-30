@@ -18,14 +18,6 @@ lazy_static! {
 	static ref HTTP: client::Http = client::Http::new(&env::var("DISCORD_API_KEY").unwrap());
 }
 
-/// Test command
-#[poise::command(slash_command)]
-async fn echo(ctx: Context<'_>, #[description = "Echo text"] echo: String) -> BlankResult {
-	ctx.say(echo).await?;
-
-	Ok(())
-}
-
 /// Leak Ved's IP
 #[poise::command(slash_command)]
 async fn doxx(ctx: Context<'_>) -> BlankResult {
@@ -81,7 +73,7 @@ async fn main() -> BlankResult {
 
 	let framework = Framework::builder()
 		.options(poise::FrameworkOptions {
-			commands: vec![echo(), doxx(), heheheha(), register()],
+			commands: vec![doxx(), heheheha(), register()],
 			prefix_options: PrefixFrameworkOptions {
 				prefix: Some("A!".into()),
 				case_insensitive_commands: true,
