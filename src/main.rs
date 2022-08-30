@@ -1,22 +1,19 @@
+use crate::util::send_message;
 use default::default;
 use dotenv::dotenv;
-use lazy_static::lazy_static;
 use poise::{
-	serenity_prelude::{self as serenity, http::client, Ready},
+	serenity_prelude::{self as serenity, Ready},
 	Framework, PrefixFrameworkOptions,
 };
 use std::env;
 
+mod util;
+
 type Error = Box<dyn std::error::Error + Send + Sync>;
 type BlankResult = std::result::Result<(), Error>;
+pub type Context<'a> = poise::Context<'a, Data, Error>;
 
-struct Data {}
-
-type Context<'a> = poise::Context<'a, Data, Error>;
-
-lazy_static! {
-	static ref HTTP: client::Http = client::Http::new(&env::var("DISCORD_API_KEY").unwrap());
-}
+pub struct Data {}
 
 /// Leak Ved's IP
 #[poise::command(slash_command)]
@@ -29,10 +26,8 @@ async fn doxx(ctx: Context<'_>) -> BlankResult {
 #[poise::command(slash_command)]
 async fn heheheha(ctx: Context<'_>) -> BlankResult {
 	ctx.say("heheheha").await?;
-	for i in 1..5 {
-		ctx.channel_id()
-			.send_message(&*HTTP, |m| m.content("heheheha"))
-			.await?;
+	for _i in 1..5 {
+		send_message(ctx, "heheheha").await?;
 	}
 	Ok(())
 }
@@ -55,9 +50,9 @@ async fn register(ctx: Context<'_>) -> Result<(), Error> {
 }
 
 fn user_data_setup<'a>(
-	ctx: &'a serenity::Context,
-	ready: &'a Ready,
-	framework: &'a Framework<Data, Error>,
+	_ctx: &'a serenity::Context,
+	_ready: &'a Ready,
+	_framework: &'a Framework<Data, Error>,
 ) -> Data {
 	Data {}
 }
@@ -69,8 +64,10 @@ async fn main() -> BlankResult {
 	println!("Getting DISCORD_API_KEY from .env");
 	let discord_api_key = env::var("DISCORD_API_KEY")?;
 	println!("Getting youtube API key from .env");
-	let youtube_api_key = env::var("YOUTUBE_API_KEY")?;
+	let _youtube_api_key = env::var("YOUTUBE_API_KEY")?;
 
+	let intents =
+		serenity::GatewayIntents::non_privileged() | serenity::GatewayIntents::MESSAGE_CONTENT;
 	let framework = Framework::builder()
 		.options(poise::FrameworkOptions {
 			commands: vec![doxx(), heheheha(), register()],
@@ -82,9 +79,7 @@ async fn main() -> BlankResult {
 			..default()
 		})
 		.token(discord_api_key)
-		.intents(
-			serenity::GatewayIntents::non_privileged() | serenity::GatewayIntents::MESSAGE_CONTENT,
-		)
+		.intents(intents)
 		.user_data_setup(move |ctx, ready, framework| {
 			Box::pin(async move { Ok(user_data_setup(ctx, ready, framework)) })
 		});
