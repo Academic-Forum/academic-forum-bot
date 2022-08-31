@@ -1,5 +1,6 @@
 use async_trait::async_trait;
 use poise::serenity_prelude::{Context, EventHandler, Message};
+use std::{thread, time::Duration};
 
 pub struct Handler;
 
@@ -9,6 +10,8 @@ impl EventHandler for Handler {
 		if message.channel_id.0 != 824142410291478529 {
 			return;
 		}
+
+		thread::sleep(Duration::from_secs(1));
 
 		let number = match message.content.parse::<u32>() {
 			Ok(number) => number,
