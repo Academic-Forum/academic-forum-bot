@@ -10,11 +10,14 @@ impl EventHandler for Handler {
 			return;
 		}
 
-		println!("{}", message.content);
 		let number = match message.content.parse::<u32>() {
 			Ok(number) => number,
 			Err(_e) => {
 				message.delete(&ctx.http).await.unwrap();
+				println!(
+					"Deleted message `{}` in #counting because it isn't a number.",
+					message.content
+				);
 				// TODO DM user
 				return;
 			}
@@ -23,21 +26,37 @@ impl EventHandler for Handler {
 		// These unwraps are safe
 		let channel = message.channel(&ctx.http).await.unwrap().guild().unwrap();
 		let prev_messages = channel
-			.messages(&ctx.http, |g| g.before(message.id).limit(1))
+			.messages(&ctx.http, |g| g.before(message.id).limit(2))
 			.await
 			.unwrap();
+
 		let prev_message = prev_messages.get(0).unwrap();
-		let prev_number = match prev_message.content.parse::<u32>() {
-			Ok(num) => num,
-			Err(_e) => {
-				prev_message.delete(&ctx.http).await.unwrap();
+		let prev_number =
+			match prev_message.content.parse::<u32>() {
+				Ok(num) => num,
+				Err(_e) => {
+					prev_message.delete(&ctx.http).await.unwrap();
+					message.delete(&ctx.http).await.unwrap();
+					println!("Deleted the last two messages in #counting because they aren't valid numbers.");
+					return;
+				}
+			};
+
+		for prev_message in &prev_messages {
+			if prev_message.author == message.author {
 				message.delete(&ctx.http).await.unwrap();
+				println!(
+					"Deleted message `{}` in #counting because 2 other people haven't counted yet.",
+					message.content
+				);
+				// TODO DM user
 				return;
 			}
-		};
+		}
 
 		if number - 1 != prev_number {
 			message.delete(&ctx.http).await.unwrap();
+			println!("Deleted message `{}` in #counting because it isn't 1 more than the previous number.", message.content);
 			// TODO DM user
 		}
 	}

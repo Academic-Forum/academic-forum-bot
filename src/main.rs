@@ -49,9 +49,12 @@ async fn main() -> BlankResult {
 		.intents(intents)
 		.user_data_setup(move |ctx, ready, framework| {
 			Box::pin(async move { Ok(user_data_setup(ctx, ready, framework)) })
-		});
+		})
+		.build()
+		.await?;
+
 	println!("Initialized");
-	framework.run().await?;
+	framework.start().await?;
 
 	Ok(())
 }

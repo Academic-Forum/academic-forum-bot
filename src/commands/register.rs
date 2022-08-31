@@ -4,7 +4,9 @@ use poise::serenity_prelude::Command;
 /// Register slash commands to discord
 #[poise::command(slash_command, prefix_command)]
 pub async fn register(ctx: Context<'_>) -> BlankResult {
-	let message = ctx.say("Registering commands...").await?;
+	let message = ctx
+		.send(|m| m.content("Registering commands...").ephemeral(true))
+		.await?;
 
 	let commands = &ctx.framework().options().commands;
 	let create_commands = poise::builtins::create_application_commands(commands);

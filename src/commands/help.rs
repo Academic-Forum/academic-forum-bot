@@ -10,6 +10,8 @@ pub async fn help(
 	let commands = &ctx.framework().options().commands;
 
 	ctx.send(|m| {
+		m.ephemeral = true;
+
 		if let Some(command) = command {
 			let matching_commands: Vec<&Command<Data, Error>> =
 				commands.iter().filter(|c| c.name == command).collect();
