@@ -38,8 +38,8 @@ async fn main() -> BlankResult {
 	dotenv()?;
 	info!("Getting DISCORD_API_KEY from .env");
 	let discord_api_key = env::var("DISCORD_API_KEY")?;
-	info!("Getting YOUTUBE_API_KEY from .env");
-	let _youtube_api_key = env::var("YOUTUBE_API_KEY")?;
+	// info!("Getting YOUTUBE_API_KEY from .env");
+	// let youtube_api_key = env::var("YOUTUBE_API_KEY")?;
 
 	// Bot
 	let intents = GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT;
