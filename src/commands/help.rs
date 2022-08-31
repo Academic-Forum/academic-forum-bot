@@ -24,7 +24,7 @@ pub async fn help(
 						.color(0xF8AA2A)
 				});
 
-				if command.parameters.len() > 0 {
+				if !command.parameters.is_empty() {
 					m.embed(|e| {
 						e.title("Arguments").color(0xF8AA2A);
 						for parameter in &command.parameters {

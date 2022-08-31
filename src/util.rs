@@ -1,24 +1,31 @@
 use crate::Context;
+use async_trait::async_trait;
 use poise::{
 	serenity_prelude::{Error, Message},
 	ReplyHandle,
 };
 
-pub async fn append_edit(
-	ctx: Context<'_>,
-	message: ReplyHandle<'_>,
-	content: &str,
-) -> Result<(), Error> {
-	let original_content = &message.message().await?.content;
-	message
-		.edit(ctx, |m| {
-			m.content(format!("{}\n{}", original_content, content))
-		})
-		.await
+#[async_trait]
+pub trait CustomContext {
+	async fn append_edit(self, message: ReplyHandle<'_>, content: &str) -> Result<(), Error>;
+
+	async fn say_message(&self, content: &str) -> Result<Message, Error>;
 }
 
-pub async fn send_message(ctx: Context<'_>, content: &str) -> Result<Message, Error> {
-	ctx.channel_id()
-		.send_message(ctx.discord(), |m| m.content(content))
-		.await
+#[async_trait]
+impl CustomContext for Context<'_> {
+	async fn append_edit(self, message: ReplyHandle<'_>, content: &str) -> Result<(), Error> {
+		let original_content = &message.message().await?.content;
+		message
+			.edit(self, |m| {
+				m.content(format!("{}\n{}", original_content, content))
+			})
+			.await
+	}
+
+	async fn say_message(&self, content: &str) -> Result<Message, Error> {
+		self.channel_id()
+			.send_message(self.discord(), |m| m.content(content))
+			.await
+	}
 }
