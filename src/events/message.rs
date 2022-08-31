@@ -1,4 +1,4 @@
-use crate::{event_handler::Handler, BlankResult};
+use crate::BlankResult;
 use poise::serenity_prelude::{Context, Message};
 use std::{thread, time::Duration};
 use tracing::info;
