@@ -31,7 +31,7 @@ fn user_data_setup<'a>(
 #[tokio::main]
 async fn main() -> BlankResult {
 	// Logging
-	let subscriber = FmtSubscriber::builder().pretty().finish();
+	let subscriber = FmtSubscriber::default();
 	tracing::subscriber::set_global_default(subscriber)?;
 
 	// Environment variables
