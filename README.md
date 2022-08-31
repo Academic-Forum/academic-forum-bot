@@ -6,7 +6,7 @@ Create a `.env` file with a discord token for the bot to use.
 DISCORD_API_KEY = "<token>"
 ```
 
-If you're using VSCode, you should install the recommended extensions. You can find these by typing `@reccomended` in the extensions search bar or running the `Show Recommended Extensions` command:
+If you're using VSCode, you should install the recommended extensions. You can find these by typing `@recommended` in the extensions search bar or running the `Show Recommended Extensions` command:
 ![](https://code.visualstudio.com/assets/docs/editor/extension-marketplace/recommendations.png)
 
 # Building
