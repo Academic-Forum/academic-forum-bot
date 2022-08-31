@@ -1,7 +1,7 @@
 on: [push, pull_request]
 name: Check
 jobs:
-  clippy_check:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
