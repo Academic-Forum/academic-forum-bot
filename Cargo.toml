@@ -9,6 +9,8 @@ default = "0.1.2"
 dotenv = "0.15.0"
 lazy_static = "1.4.0"
 poise = "0.3.0"
+tracing = "0.1.36"
+tracing-subscriber = "0.3.15"
 
 [dependencies.tokio]
 version = "1.20.1"

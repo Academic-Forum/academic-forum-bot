@@ -1,5 +1,6 @@
 mod commands;
 mod event_handler;
+mod events;
 mod util;
 
 use crate::{commands::*, event_handler::Handler};
@@ -10,6 +11,8 @@ use poise::{
 	Framework, PrefixFrameworkOptions,
 };
 use std::env;
+use tracing::info;
+use tracing_subscriber::FmtSubscriber;
 
 type Error = Box<dyn std::error::Error + Send + Sync>;
 type BlankResult = std::result::Result<(), Error>;
@@ -27,13 +30,18 @@ fn user_data_setup<'a>(
 
 #[tokio::main]
 async fn main() -> BlankResult {
-	dotenv()?;
+	// Logging
+	let subscriber = FmtSubscriber::builder().pretty().finish();
+	tracing::subscriber::set_global_default(subscriber)?;
 
-	println!("Getting DISCORD_API_KEY from .env");
+	// Environment variables
+	dotenv()?;
+	info!("Getting DISCORD_API_KEY from .env");
 	let discord_api_key = env::var("DISCORD_API_KEY")?;
-	println!("Getting YOUTUBE_API_KEY from .env");
+	info!("Getting YOUTUBE_API_KEY from .env");
 	let _youtube_api_key = env::var("YOUTUBE_API_KEY")?;
 
+	// Bot
 	let intents = GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT;
 	let framework = Framework::builder()
 		.client_settings(|c| c.event_handler(Handler))
@@ -53,7 +61,7 @@ async fn main() -> BlankResult {
 		.build()
 		.await?;
 
-	println!("Initialized");
+	info!("Initialized");
 	framework.start().await?;
 
 	Ok(())
