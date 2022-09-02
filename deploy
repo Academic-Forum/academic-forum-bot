@@ -3,4 +3,4 @@
 cargo update
 cross build --release --target aarch64-unknown-linux-gnu
 echo Rsyncing binary...
-rsync target/aarch64-unknown-linux-gnu/release/academic_forum_bot_rewrite objobj@pi.vedthiru.com:~/.local/bin
+rsync target/aarch64-unknown-linux-gnu/release/academic_forum_bot objobj@pi.vedthiru.com:~/.local/bin
