@@ -1,5 +1,0 @@
-#!/bin/zsh
-
-cross build --release --target aarch64-unknown-linux-gnu
-echo Rsyncing binary...
-rsync target/aarch64-unknown-linux-gnu/release/academic_forum_bot objobj@pi.vedthiru.com:~/.local/bin
