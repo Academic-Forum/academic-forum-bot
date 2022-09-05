@@ -1,12 +1,13 @@
 use crate::{BlankResult, Context};
 use poise::serenity_prelude::User;
-use rand::{thread_rng, Rng};
+use rand::{Rng, SeedableRng};
+use rand_chacha::ChaCha8Rng;
 
 /// Leak someone's IP using advanced Kali Linux hacking skills
 #[poise::command(slash_command)]
 pub async fn doxx(ctx: Context<'_>, #[description = "Person to doxx"] user: User) -> BlankResult {
 	let ip = {
-		let mut rng = thread_rng();
+		let mut rng = ChaCha8Rng::seed_from_u64(user.id.0);
 		format!(
 			"{}.{}.{}.{}",
 			rng.gen_range(0..255),

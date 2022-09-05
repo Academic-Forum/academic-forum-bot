@@ -12,6 +12,7 @@ dependencies = [
  "lazy_static",
  "poise",
  "rand",
+ "rand_chacha",
  "tokio",
  "tracing",
  "tracing-subscriber",
