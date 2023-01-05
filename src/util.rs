@@ -25,7 +25,7 @@ impl CustomContext for Context<'_> {
 
 	async fn say_message(&self, content: &str) -> Result<Message, Error> {
 		self.channel_id()
-			.send_message(self.discord(), |m| m.content(content))
+			.send_message(self, |m| m.content(content))
 			.await
 	}
 }

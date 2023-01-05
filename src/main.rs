@@ -55,7 +55,7 @@ async fn main() -> BlankResult {
 		})
 		.token(discord_api_key)
 		.intents(intents)
-		.user_data_setup(move |ctx, ready, framework| {
+		.setup(move |ctx, ready, framework| {
 			Box::pin(async move { Ok(user_data_setup(ctx, ready, framework)) })
 		})
 		.build()

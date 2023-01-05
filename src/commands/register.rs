@@ -10,7 +10,7 @@ pub async fn register(ctx: Context<'_>) -> BlankResult {
 
 	let commands = &ctx.framework().options().commands;
 	let create_commands = poise::builtins::create_application_commands(commands);
-	Command::set_global_application_commands(ctx.discord(), |b| {
+	Command::set_global_application_commands(ctx, |b| {
 		*b = create_commands; // replace the given builder with the one prepared by poise
 		b
 	})

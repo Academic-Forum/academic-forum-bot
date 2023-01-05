@@ -32,7 +32,7 @@ pub async fn help(
 						for parameter in &command.parameters {
 							e.field(
 								&parameter.name,
-								&parameter
+								parameter
 									.description
 									.as_ref()
 									.unwrap_or(&"No description".to_string()),
