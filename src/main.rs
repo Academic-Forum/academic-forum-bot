@@ -46,7 +46,7 @@ async fn main() -> BlankResult {
 	let framework = Framework::builder()
 		.client_settings(|c| c.event_handler(Handler))
 		.options(poise::FrameworkOptions {
-			commands: vec![doxx(), heheheha(), help(), register(), troll()],
+			commands: vec![doxx(), help(), register(), troll()],
 			prefix_options: PrefixFrameworkOptions {
 				prefix: Some("A!".into()),
 				..default()
