@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 async-trait = "0.1"
 default = "0.1"
-dotenv = "0.15"
+dotenvy = "0.15"
 lazy_static = "1"
 poise = "0.5"
 rand = "0.8"

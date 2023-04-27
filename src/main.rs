@@ -5,7 +5,7 @@ mod util;
 
 use crate::{commands::*, event_handler::Handler};
 use default::default;
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use poise::{
 	serenity_prelude::{self as serenity, GatewayIntents, Ready},
 	Framework, PrefixFrameworkOptions,
