@@ -16,7 +16,7 @@ pub async fn help(
 			let matching_commands: Vec<&Command<Data, Error>> =
 				commands.iter().filter(|c| c.name == command).collect();
 
-			if let Some(command) = matching_commands.get(0) {
+			if let Some(command) = matching_commands.first() {
 				m.embed(|e| {
 					e.title(format!("Help for command `{}`", command.name))
 						.description(format!(

@@ -30,7 +30,7 @@ pub async fn message(ctx: Context, message: Message) -> BlankResult {
 		.messages(&ctx.http, |g| g.before(message.id).limit(2))
 		.await?;
 
-	let prev_message = prev_messages.get(0).unwrap();
+	let prev_message = prev_messages.first().unwrap();
 	let prev_number = match prev_message.content.parse::<u32>() {
 		Ok(num) => num,
 		Err(_e) => {
